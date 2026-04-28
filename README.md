@@ -206,6 +206,39 @@ docker compose up --build
 
 ---
 
+## CURL
+1.  For Load Optimizer (POST)
+```bash
+curl -X POST http://localhost:8080/api/v1/load-optimizer/optimize \
+-H "Content-Type: application/json" \
+-H "x-api-key: supersecret123" \
+-d '{
+  "truck": {
+    "id": "truck-123",
+    "max_weight_lbs": 44000,
+    "max_volume_cuft": 3000
+  },
+  "orders": [
+    {
+      "id": "ord-001",
+      "payout_cents": 250000,
+      "weight_lbs": 10000,
+      "volume_cuft": 1000,
+      "origin": "LA",
+      "destination": "Dallas",
+      "pickup_date": "2025-12-05",
+      "delivery_date": "2025-12-09",
+      "is_hazmat": false
+    }
+  ]
+}'
+```
+
+2. For Health Check 
+```bash
+curl http://localhost:8080/health
+```
+
 
 
 ## 👨‍💻 Author
