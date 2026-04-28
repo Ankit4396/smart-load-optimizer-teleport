@@ -27,4 +27,4 @@ const routes: ServerRoute[] = [
   }
 ];
 
-module.exports = routes;
+export default routes;

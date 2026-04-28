@@ -5,8 +5,9 @@ import dotenv from 'dotenv';
 import Inert from '@hapi/inert';
 import Vision from '@hapi/vision';
 import HapiSwagger from 'hapi-swagger';
-import * as routes from 'hapi-auto-routes';
-import Path from 'path';
+
+import healthRoutes from './routes/healthRoutes';
+import loadOptimizerRoutes from './routes/loadOptimizer';
 
 dotenv.config();
 
@@ -23,11 +24,13 @@ export const init = async (): Promise<Server> => {
     }
   });
 
-  // API Key Middleware
+  // ========================
+  // API KEY AUTH MIDDLEWARE
+  // ========================
   server.ext('onRequest', (request, h) => {
     const apiKey = request.headers['x-api-key'];
-  
-    // Allow all Swagger + health routes
+
+    // allow public routes
     if (
       request.path.startsWith('/documentation') ||
       request.path.startsWith('/swaggerui') ||
@@ -36,7 +39,7 @@ export const init = async (): Promise<Server> => {
     ) {
       return h.continue;
     }
-  
+
     if (!apiKey || apiKey !== process.env.API_KEY) {
       return h.response({
         statusCode: 401,
@@ -44,11 +47,13 @@ export const init = async (): Promise<Server> => {
         message: 'Invalid or missing API key'
       }).code(401).takeover();
     }
-  
+
     return h.continue;
   });
 
-  // Swagger config
+  // ========================
+  // SWAGGER CONFIG
+  // ========================
   const swaggerOptions: HapiSwagger.RegisterOptions = {
     info: {
       title: 'Smart Load Optimizer API',
@@ -63,6 +68,9 @@ export const init = async (): Promise<Server> => {
     }
   };
 
+  // ========================
+  // REGISTER PLUGINS
+  // ========================
   await server.register([
     Inert,
     Vision,
@@ -72,10 +80,13 @@ export const init = async (): Promise<Server> => {
     }
   ]);
 
-  // Auto-load routes
-  routes.bind(server).register({
-    pattern: Path.join(process.cwd(), 'src/routes/**/*.ts')
-  });
+  // ========================
+  // REGISTER ROUTES (IMPORTANT FIX)
+  // ========================
+  server.route([
+    ...healthRoutes,
+    ...loadOptimizerRoutes
+  ]);
 
   return server;
 };
@@ -85,10 +96,9 @@ export const start = async (): Promise<void> => {
   console.log(`Server running on ${server.info.uri}`);
 };
 
-process.on('unhandledRejection', (err: any) => {
+process.on('unhandledRejection', (err) => {
   console.error(err);
   process.exit(1);
 });
 
-// Start server
 init().then(() => start());
