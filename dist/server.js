@@ -64,7 +64,7 @@ const init = () => __awaiter(void 0, void 0, void 0, function* () {
             }
         }
     });
-    // 🔐 API Key Middleware
+    // API Key Middleware
     exports.server.ext('onRequest', (request, h) => {
         const apiKey = request.headers['x-api-key'];
         // Allow all Swagger + health routes
@@ -83,7 +83,7 @@ const init = () => __awaiter(void 0, void 0, void 0, function* () {
         }
         return h.continue;
     });
-    // 📄 Swagger config
+    // Swagger config
     const swaggerOptions = {
         info: {
             title: 'Smart Load Optimizer API',
@@ -105,7 +105,7 @@ const init = () => __awaiter(void 0, void 0, void 0, function* () {
             options: swaggerOptions
         }
     ]);
-    // Auto-load routes (your style)
+    // Auto-load routes
     routes.bind(exports.server).register({
         pattern: path_1.default.join(process.cwd(), 'src/routes/**/*.ts')
     });

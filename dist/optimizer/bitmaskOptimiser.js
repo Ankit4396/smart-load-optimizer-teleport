@@ -9,30 +9,55 @@ const runOptimizer = (truck, orders) => {
     const dpVolume = new Array(1 << n).fill(0);
     const dpPayout = new Array(1 << n).fill(0);
     const dpHazmat = new Array(1 << n).fill(0);
+    // NEW: time tracking
+    const dpMaxPickup = new Array(1 << n).fill(null);
+    const dpMinDelivery = new Array(1 << n).fill(null);
     for (let mask = 1; mask < (1 << n); mask++) {
         const lsb = mask & -mask;
         const idx = Math.log2(lsb);
         const prev = mask ^ lsb;
-        dpWeight[mask] = dpWeight[prev] + orders[idx].weight_lbs;
-        dpVolume[mask] = dpVolume[prev] + orders[idx].volume_cuft;
-        dpPayout[mask] = dpPayout[prev] + orders[idx].payout_cents;
-        dpHazmat[mask] = dpHazmat[prev] | (orders[idx].is_hazmat ? 1 : 2);
-        // 🚫 Reject mixed hazmat + non-hazmat
+        const order = orders[idx];
+        dpWeight[mask] = dpWeight[prev] + order.weight_lbs;
+        dpVolume[mask] = dpVolume[prev] + order.volume_cuft;
+        dpPayout[mask] = dpPayout[prev] + order.payout_cents;
+        dpHazmat[mask] = dpHazmat[prev] | (order.is_hazmat ? 1 : 2);
+        // Reject mixed hazmat + non-hazmat
         if (dpHazmat[mask] === 3) {
             continue;
         }
-        // 🚫 Constraint check
+        // NEW: time logic
+        const currentPickup = new Date(order.pickup_date);
+        const currentDelivery = new Date(order.delivery_date);
+        if (dpMaxPickup[prev] === null) {
+            dpMaxPickup[mask] = currentPickup;
+            dpMinDelivery[mask] = currentDelivery;
+        }
+        else {
+            dpMaxPickup[mask] =
+                currentPickup > dpMaxPickup[prev]
+                    ? currentPickup
+                    : dpMaxPickup[prev];
+            dpMinDelivery[mask] =
+                currentDelivery < dpMinDelivery[prev]
+                    ? currentDelivery
+                    : dpMinDelivery[prev];
+        }
+        // Reject time conflicts
+        if (dpMaxPickup[mask] > dpMinDelivery[mask]) {
+            continue;
+        }
+        // Constraint check (weight/volume)
         if (dpWeight[mask] > truck.max_weight_lbs ||
             dpVolume[mask] > truck.max_volume_cuft) {
             continue;
         }
-        // ✅ Maximize payout
+        // Maximize payout
         if (dpPayout[mask] > bestPayout) {
             bestPayout = dpPayout[mask];
             bestMask = mask;
         }
     }
-    // 🔍 Extract selected orders
+    // Extract selected orders
     const selectedOrders = [];
     let totalWeight = 0;
     let totalVolume = 0;

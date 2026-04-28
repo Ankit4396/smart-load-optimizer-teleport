@@ -13,22 +13,22 @@ exports.optimize = void 0;
 const bitmaskOptimiser_1 = require("../optimizer/bitmaskOptimiser");
 const optimize = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { truck, orders } = payload;
-    // ❌ Invalid payload
+    // Invalid payload
     if (!truck || !orders || !Array.isArray(orders)) {
         throw new Error('Invalid payload');
     }
-    // ✅ Step 6: Handle empty orders
+    //Handle empty orders
     if (orders.length === 0) {
         return emptyResponse(truck);
     }
-    // ✅ Step 7: Basic time validation
+    // Basic time validation
     const validOrders = orders.filter((o) => {
         return o.pickup_date <= o.delivery_date;
     });
     if (validOrders.length === 0) {
         return emptyResponse(truck);
     }
-    // ✅ Step 5 (improved): Group by lane
+    // Group by lane
     const laneMap = {};
     for (const order of validOrders) {
         const key = `${order.origin}__${order.destination}`;
@@ -37,7 +37,7 @@ const optimize = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         laneMap[key].push(order);
     }
     let bestResult = null;
-    // 🚀 Run optimizer per lane
+    //Run optimizer per lane
     for (const key in laneMap) {
         const result = (0, bitmaskOptimiser_1.runOptimizer)(truck, laneMap[key]);
         if (!bestResult ||
@@ -45,15 +45,15 @@ const optimize = (payload) => __awaiter(void 0, void 0, void 0, function* () {
             bestResult = result;
         }
     }
-    // ✅ Step 6: If nothing valid found
+    // If nothing valid found
     if (!bestResult) {
         return emptyResponse(truck);
     }
-    // ✅ Step 8: Round percentages
+    // Round percentages
     return Object.assign(Object.assign({}, bestResult), { utilization_weight_percent: Number(bestResult.utilization_weight_percent.toFixed(2)), utilization_volume_percent: Number(bestResult.utilization_volume_percent.toFixed(2)) });
 });
 exports.optimize = optimize;
-// 🔧 Helper for empty response
+//Helper for empty response
 const emptyResponse = (truck) => ({
     truck_id: truck.id,
     selected_order_ids: [],
