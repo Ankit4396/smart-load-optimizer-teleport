@@ -1,0 +1,120 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PRODUCT_APPROVAL_STATUS = exports.PRODUCT_TYPE = exports.SELLER_STATUS = exports.ADDRESS_ENTITY = exports.ADDRESS_TYPES = exports.ATTRIBUTE_TYPE = exports.DOCUMENT_STATUS = exports.USER_STATUS = exports.TOKEN_TYPES = exports.AUTOMATION_CALCULATION_FROM = exports.BLOCKED = exports.ATTACHMENT_TYPE = exports.LANGUAGE = exports.AUTOMATION_STATUS = exports.CAMPAIGN_STATUS = exports.IMPORT_STATUS = exports.STATUS = void 0;
+const STATUS = {
+    INACTIVE: 0,
+    ACTIVE: 1
+};
+exports.STATUS = STATUS;
+const USER_STATUS = {
+    INACTIVE: 0,
+    ACTIVE: 1
+};
+exports.USER_STATUS = USER_STATUS;
+const DOCUMENT_STATUS = {
+    INACTIVE: 0,
+    PENDING: 1,
+    APPROVED: 2,
+    REJECTED: 3
+};
+exports.DOCUMENT_STATUS = DOCUMENT_STATUS;
+const IMPORT_STATUS = {
+    PENDING: 0,
+    QUEUED: 1,
+    INPROCESS: 2,
+    PROCESSED: 3,
+    FAILED: 4
+};
+exports.IMPORT_STATUS = IMPORT_STATUS;
+const LANGUAGE = {
+    en: 1,
+    fr: 3,
+};
+exports.LANGUAGE = LANGUAGE;
+const ATTACHMENT_TYPE = {
+    LOCAL: 1,
+    S3_BUCKET: 2,
+};
+exports.ATTACHMENT_TYPE = ATTACHMENT_TYPE;
+const CAMPAIGN_STATUS = {
+    SCHEDULED: 0
+};
+exports.CAMPAIGN_STATUS = CAMPAIGN_STATUS;
+const AUTOMATION_STATUS = {
+    SCHEDULED: 0
+};
+exports.AUTOMATION_STATUS = AUTOMATION_STATUS;
+const AUTOMATION_CALCULATION_FROM = {
+    SUBSCRIPTION_DATE: 1,
+    LIST_CREATION_DATE: 2
+};
+exports.AUTOMATION_CALCULATION_FROM = AUTOMATION_CALCULATION_FROM;
+const INTERVAL_TYPE = {
+    DAY: 1,
+    WEEK: 2,
+    MONTH: 3,
+    YEAR: 4
+};
+const TOKEN_TYPES = {
+    SIGNUP: "signup",
+    FORGET_PASSWORD: "forgetpassword",
+    CHANGE_EMAIL: "change-email",
+    CHANGE_MOBILE: "change-mobile",
+    AGREEMENT: "agreement"
+};
+exports.TOKEN_TYPES = TOKEN_TYPES;
+const ADDRESS_TYPES = {
+    PICKUP: "pickup",
+    RETURN: "return",
+    OTHER: "other"
+};
+exports.ADDRESS_TYPES = ADDRESS_TYPES;
+const ADDRESS_ENTITY = {
+    BUYER: "buyer",
+    SELLER: "seller",
+    SHOP: "shop"
+};
+exports.ADDRESS_ENTITY = ADDRESS_ENTITY;
+const BLOCKED = {
+    EMAIL_CODES: ['SIGNUP', 'FORGOT_PASSWORD', 'RESET_PASSWORD']
+};
+exports.BLOCKED = BLOCKED;
+const ATTRIBUTE_TYPE = {
+    TEXT: 1,
+    DROPDOWN: 2
+};
+exports.ATTRIBUTE_TYPE = ATTRIBUTE_TYPE;
+const SELLER_STATUS = {
+    NO_SELLER: 0,
+    CREATED_REQUEST: 1,
+    DOCUMENT_GENERATED: 2,
+    DOCUMENT_SIGNED: 3,
+    ACCOUNT_APPROVED: 4,
+    ACCOUNT_REJECTED: 5,
+    DOCUMENT_REGENERATED: 6,
+    PRE_APPROVED: 7,
+    DOC_DETAILS_SUBMITTED: 8
+};
+exports.SELLER_STATUS = SELLER_STATUS;
+const PRODUCT_TYPE = {
+    RENT: 1,
+    BUY: 2,
+    PRE_LOVED: 3
+};
+exports.PRODUCT_TYPE = PRODUCT_TYPE;
+const PRODUCT_APPROVAL_STATUS = {
+    NOT_SENT_FOR_APPROVAL: 0,
+    SENT_FOR_APPROVAL: 1,
+    APPROVED: 2,
+    REJECTED: 3
+};
+exports.PRODUCT_APPROVAL_STATUS = PRODUCT_APPROVAL_STATUS;
+const PRODUCT_DIMENSIONS = {
+    1: "15 x 15 x 10 cm",
+    2: "15 x 15 x 15 cm",
+    3: "15 x 15 x 20 cm",
+};
+const WEIHGT_UNIT = {
+    POUND: 1,
+    KG: 2
+};
